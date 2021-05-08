@@ -1,5 +1,20 @@
 {
+  "name": "compos",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "bin": {
+    "compos": "index.js"
+  },
+  "keywords": [],
+  "author": "akelen",
+  "license": "ISC",
   "dependencies": {
-    "inquirer": "^8.0.0"
+    "axios": "^0.21.1",
+    "commander": "^7.2.0",
+    "email-prompt": "^0.3.2",
+    "enquirer": "^2.3.6",
+    "inquirer": "^6.2.1",
+    "lowdb": "^1.0.0"
   }
 }
