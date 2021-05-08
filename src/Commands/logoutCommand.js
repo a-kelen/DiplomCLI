@@ -6,12 +6,15 @@ module.exports = function () {
         inquirer
             .prompt([
                 {
-                    name: "confirm",
-                    type: "confirm",
-                    message: "Confirm logout:",
+                    name: 'confirm',
+                    type: 'confirm',
+                    message: 'Confirm logout:',
                 },
             ]).then((answer) => {
-                console.log(answer.confirm)
+                if(answer.confirm) {
+                    db.set('token', '').write()
+                    console.log('Logout successfully...')
+                }
             });
             
     }

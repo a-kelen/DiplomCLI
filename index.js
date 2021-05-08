@@ -11,6 +11,7 @@ const componentsCommand = require('./src/Commands/componentsCommand')
 const librariesCommand = require('./src/Commands/librariesCommand')
 const dependenciesCommand = require('./src/Commands/dependenciesCommand')
 const installCommand = require('./src/Commands/installCommand')
+const langCommand = require('./src/Commands/langCommand')
 //+ login
 // logout
 // lang (-set ua/en)
@@ -45,35 +46,33 @@ program
 program
   .command('components')
   .alias('c')
-  .arguments('<name>')
   .option('-t, --type <elementType>', 'Type of element')
   .option('-m, --my', 'My components')
   .description('List of components')
-  .action(function () {
-    componentsCommand()
+  .action(function (options) {
+    componentsCommand(options)
   })
 
 program
   .command('libraries')
   .alias('l')
-  .arguments('<name>')
   .option('-t, --type <elementType>', 'Type of element')
   .option('-m, --my', 'My libraries')
   .description('List of libraries')
-  .action(function () {
-    librariesCommand()
+  .action(function (options) {
+    librariesCommand(options)
   })
 
 program
   .command('dependencies')
   .alias('d')
-  .arguments('<name>')
+  .arguments('[name]')
   .option('-l, --library', 'Type of element')
   .option('-c, --component', 'Type of element')
   .option('-i, --install', 'Install dependencies')
   .description('List of dependencies for element')
-  .action(function () {
-    dependenciesCommand()
+  .action(function (name, options) {
+    dependenciesCommand(name, options)
   })
 
 program
@@ -92,8 +91,8 @@ program
   .command('lang')
   .option('-s, --set', 'Set language ua/en ')
   .description('Command for language setting')
-  .action(function () {
-
+  .action(function (options) {
+    langCommand(options)
   }) 
 
-program.parse(process.argv);
+program.parse(process.argv)

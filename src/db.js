@@ -5,7 +5,10 @@ const adapter = new fileSync('db.json')
 const db = lowdb(adapter)
 
 db.defaults({
-    token: ''
+    token: '',
+    lang: 'en',
+    activeLibrary: null,
+    activeComponent: null
 }).write()
 const token = db.get('token')
 
