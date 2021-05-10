@@ -1,5 +1,5 @@
 const inquirer = require('inquirer')
-const { db, token } = require('../db')
+const { setValue, getValue } = require('../db')
 
 module.exports = function (options) {
     if(options.set) {
@@ -13,10 +13,15 @@ module.exports = function (options) {
             },
         ])
         .then(answer => { 
-            db.set('lang', answer.lang).write()
+            setValue('lang', answer.lang)
         })
     } else {
-        console.log('Current language:' ,db.get('lang').value())
+        getValue('lang').then(val => {
+            if(!val) {   val = 'en'
+                    setValue('lang', en)
+                }
+            console.log('Current language:' , val)
+        })
     }
             
 }

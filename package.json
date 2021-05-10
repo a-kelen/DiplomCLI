@@ -11,10 +11,12 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^0.21.1",
+    "cli-storage": "^0.0.1",
     "commander": "^7.2.0",
     "email-prompt": "^0.3.2",
     "enquirer": "^2.3.6",
     "inquirer": "^6.2.1",
+    "jsonbase.com": "^1.0.3",
     "lowdb": "^1.0.0",
     "npm": "^7.12.0",
     "npm-api": "^1.0.1"

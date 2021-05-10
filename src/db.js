@@ -1,17 +1,23 @@
-const lowdb = require('lowdb')
-const fileSync = require('lowdb/adapters/FileSync')
+const jsonbase = require('jsonbase.com')
+const TOKEN = '3c9622697a53d8b2f3cf825dc4160f7e1aad46c1a759475edeb76bce5cd33a64'
+const store = jsonbase(TOKEN)
 
-const adapter = new fileSync('db.json')
-const db = lowdb(adapter)
+function setValue(key, value) {
+    return store.write(key ,{ value })
+}
 
-db.defaults({
-    token: '',
-    lang: 'en',
-    activeLibrary: null,
-    activeComponent: null
-}).write()
-const token = db.get('token')
+function getValue(key) {
+    return new Promise((resolve, reject) => {
+        store.read(key).then( (resp) => {
+            resolve(resp.data.value)
+        })
+        .catch(err => resolve(null))
+    })
+    
+}
+
+let token = getValue('token')
 
 module.exports = {
-    db, token
+    setValue, getValue, token
 }

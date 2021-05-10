@@ -2,10 +2,9 @@ const inquirer = require('inquirer')
 const axios = require('../axios')
 
 
-
-
-const { db, token } = require('../db')
+const { setValue, getValue, token } = require('../db')
 module.exports = function () {
+    token.then(() => {
     inquirer
         .prompt([
             {
@@ -28,8 +27,10 @@ module.exports = function () {
                 .then(resp => {
                     if(resp?.data)
                         {
-                            console.log('You are logged as : ', resp.data.name)
-                            db.set('token', resp.data.token).write()
+                            
+                            setValue('token', resp.data.token).then(() => {
+                                console.log('You are logged as : ', resp.data.name)
+                            })
                         }
                 })
                 .catch(() => {
@@ -38,4 +39,6 @@ module.exports = function () {
             
             
         });
-    }
+              
+    })
+}

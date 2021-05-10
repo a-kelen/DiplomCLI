@@ -1,6 +1,6 @@
 const inquirer = require('inquirer')
 const axios = require('../axios')
-const { db, token } = require('../db')
+const { setValue, token } = require('../db')
 
 function getItems(page, my) {
     axios.get('CLI/components', {
@@ -38,7 +38,7 @@ function getItems(page, my) {
                     return
                 if(!['[next]', '[prev]', '[exit]'].includes(answer.component)) {
                     console.info(`[${answer.component}]  is active`)
-                    db.set('activeComponent', answer.component).write()
+                    setValue('activeComponent', answer.component)
                 }
             });
     })
@@ -50,6 +50,8 @@ function getItems(page, my) {
 module.exports = function (options) {
     let page = 0
     let my = options.my || false
-    getItems(page)
+    token.then(() => {
+        getItems(page)
+    })
     
 }

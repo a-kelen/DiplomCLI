@@ -7,7 +7,8 @@ let ax = Axios.create({
         rejectUnauthorized: false
     })
 })
-if(token.value().length > 0)
-    ax.defaults.headers.common.Authorization = 'Bearer ' + token.value()
+token.then((val => {
+    ax.defaults.headers.common.Authorization = 'Bearer ' + val
+})) 
 
 module.exports = ax

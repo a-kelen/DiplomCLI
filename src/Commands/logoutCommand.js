@@ -1,20 +1,28 @@
 const inquirer = require('inquirer')
-const { db, token } = require('../db')
-
+const { setValue, token } = require('../db')
 module.exports = function () {
-    if(token.value() != "")
-        inquirer
-            .prompt([
-                {
-                    name: 'confirm',
-                    type: 'confirm',
-                    message: 'Confirm logout:',
-                },
-            ]).then((answer) => {
-                if(answer.confirm) {
-                    db.set('token', '').write()
-                    console.log('Logout successfully...')
-                }
-            });
+    token.then(val => {
+        if(val != "")
+            inquirer
+                .prompt([
+                    {
+                        name: 'confirm',
+                        type: 'confirm',
+                        message: 'Confirm logout:',
+                    },
+                ]).then((answer) => {
+                    if(answer.confirm) {
+                        Promise.all([
+                            setValue('token', ''),
+                            setValue('activeLibrary', ''),
+                            setValue('activeComponent', '')]
+                        ).then(() => {
+                            console.log('Logout successfully ...')
+                        })
+                        
+                    }
+                });
+    })
+    
             
-    }
+}
