@@ -38,7 +38,8 @@ module.exports = function (name, options) {
                             }
                         })
                         .then(resp => {
-                            console.log(resp.data)
+                            let out = resp.data.join('\n')
+                            console.log(out)
                         })
                         .catch(err => {
                             console.log('err')

@@ -3,7 +3,6 @@
 const inquirer = require('inquirer');
 const axios = require('axios');
 const { Command } = require('commander');
-const { db, token } = require('./db')
 
 const loginCommand = require('./src/Commands/loginCommand')
 const logoutCommand = require('./src/Commands/logoutCommand')
@@ -78,13 +77,13 @@ program
 program
   .command('install')
   .alias('i')
-  .arguments('<name> [path]')
+  .arguments('[name] [path]')
   .option('-l, --library', 'Type of element')
   .option('-c, --component', 'Type of element')
   .option('-d, --dependencies', 'Install dependencies for element')
   .description('Command for install a element')
-  .action(function () {
-    installCommand()
+  .action(function (name, path, options) {
+    installCommand(name, path, options)
   })  
 
 program

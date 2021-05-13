@@ -29,7 +29,9 @@ module.exports = function () {
                         {
                             
                             setValue('token', resp.data.token).then(() => {
-                                console.log('You are logged as : ', resp.data.name)
+                                setValue('username', resp.data.username).then(() => {
+                                    console.log('You are logged as : ', resp.data.name)
+                                })
                             })
                         }
                 })
