@@ -15,12 +15,13 @@ function getFiles(author, name, type) {
                 name
             }
         })
-        .then(resp => {
-            resolve(resp.data)
-        })
-        .catch(err => {
-            reject('Error')
-        })
+            .then(resp => {
+                resolve(resp.data)
+            })
+            .catch(err => {
+                console.log(err)
+                reject('Error')
+            })
     })
 }
 
@@ -33,18 +34,23 @@ function notExistFiles(files, path = './') {
     return files.length > 0
 }
 
-function verifyFSAndInstall(author, elemName, elem, path) {
-    console.log('--', path)
+function verifyFSAndInstall(author, elemName, elem, path = './') {
     return new Promise((resolve, reject) => {
         getFiles(author, elemName, elem)
-        .then((res) => {
-            if(notExistFiles(res.files, path)) {
-                downloadFiles(res.id, elem, path)
-            }
-        })
-        .catch(() => {
-            reject()
-        })
+            .then((res) => {
+                if(notExistFiles(res.files, path)) {
+                    downloadFiles(res.id, elem, path)
+                        .then(() => {
+                            console.log('Files has been installed')
+                        })
+                    resolve()
+                }
+                reject()
+            })
+            .catch((err) => {
+                console.log('ver err')
+                reject(err)
+            })
     })
     
 }
@@ -55,14 +61,9 @@ function downloadFiles(id, elem, path = '.') {
             responseType: 'arraybuffer'
         })
         .then(res => {
-            var zip = new AdmZip(res.data);
-            // var zipEntries = zip.getEntries();
-
-            
-            // for (var i = 0; i < zipEntries.length; i++) {
-            //     console.log(zip.readAsText(zipEntries[i]));
-            // }
-            zip.extractAllTo(path, true);
+            var zip = new AdmZip(res.data)
+           
+            zip.extractAllTo(pathLib.join(process.cwd() ,path), true)
         })
     })
 }
@@ -78,7 +79,6 @@ module.exports = function (name, path, options) {
         return
     }
     
-
     let elem = options.library ? 'Library' : 'Component'
     getValue('active' + elem).then(val => {
         active = val
@@ -111,6 +111,12 @@ module.exports = function (name, path, options) {
                 author = vals[0].slice(1)
                 elemName = vals[1]
                 verifyFSAndInstall(author, elemName, elem, path)
+                .then(() => {
+                    console.log('Files has been installed')
+                })
+                .catch(err => {
+                    console.log('FS Error')
+                })
             } else {
                 console.log('Incorect format of element name')
             }
