@@ -1,5 +1,7 @@
 const inquirer = require('inquirer')
 const { setValue, token } = require('../db')
+const log = require('../logging')
+
 module.exports = function () {
     token.then(val => {
         if(val != "")
@@ -17,7 +19,7 @@ module.exports = function () {
                             setValue('activeLibrary', ''),
                             setValue('activeComponent', '')]
                         ).then(() => {
-                            console.log('Logout successfully ...')
+                            log.success('Logout successfully ...')
                         })
                         
                     }

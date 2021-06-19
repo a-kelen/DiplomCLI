@@ -17,9 +17,10 @@ module.exports = function (options) {
         })
     } else {
         getValue('lang').then(val => {
-            if(!val) {   val = 'en'
-                    setValue('lang', en)
-                }
+            if(!val) {   
+                val = 'en'
+                setValue('lang', en)
+            }
             console.log('Current language:' , val)
         })
     }

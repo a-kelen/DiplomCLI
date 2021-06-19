@@ -1,6 +1,8 @@
 const inquirer = require('inquirer')
 const axios = require('../axios')
 const { setValue , getValue} = require('../db')
+const log = require('../logging')
+
 module.exports = function (name, options) {
     
     if(options.library && options.component) {
@@ -42,7 +44,7 @@ module.exports = function (name, options) {
                             console.log(out)
                         })
                         .catch(err => {
-                            console.log('err')
+                            log.error('Error')
                         })
                     }
                 });

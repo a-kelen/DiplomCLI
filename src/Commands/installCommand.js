@@ -5,6 +5,7 @@ const fs = require('fs')
 const pathLib = require('path')
 const { type } = require('os')
 var AdmZip = require('adm-zip')
+const log = require('../logging')
 
 function getFiles(author, name, type) {
     return new Promise((resolve, reject) => {
@@ -19,15 +20,17 @@ function getFiles(author, name, type) {
                 resolve(resp.data)
             })
             .catch(err => {
-                console.log(err)
-                reject('Error')
+                reject(err)
             })
     })
 }
 
-function notExistFiles(files, path = './') {    
+function notExistFiles(files, path = './') {
     for(let file of files)  {
-        if(fs.existsSync(pathLib.join(process.cwd() ,path, file)))
+        let temp = file
+        if(file.split('/').length > 1)
+            temp = file.split('\\')[1]
+        if(fs.existsSync(pathLib.join(process.cwd() ,path, temp)))
             return false
     }
 
@@ -38,17 +41,21 @@ function verifyFSAndInstall(author, elemName, elem, path = './') {
     return new Promise((resolve, reject) => {
         getFiles(author, elemName, elem)
             .then((res) => {
+                if(!res) {
+                    log.error('Element not found')
+                    return;
+                }
                 if(notExistFiles(res.files, path)) {
                     downloadFiles(res.id, elem, path)
                         .then(() => {
-                            console.log('Files has been installed')
+                            log.success('Files has been installed')
                         })
                     resolve()
                 }
-                reject()
+                else
+                    reject()
             })
             .catch((err) => {
-                console.log('ver err')
                 reject(err)
             })
     })
@@ -72,17 +79,16 @@ function downloadFiles(id, elem, path = '.') {
 
 module.exports = function (name, path, options) {
     if(options.library && options.component) {
-        console.log('Use only -l or -c')
+        log.raw('Use only -l or -c')
         return
     } else if(!options.library && !options.component) {
-        console.log('Use option -l or -c')
+        log.raw('Use option -l or -c')
         return
     }
     
     let elem = options.library ? 'Library' : 'Component'
     getValue('active' + elem).then(val => {
         active = val
-        
         if(!name && active) {
             console.log(active)
             inquirer
@@ -106,19 +112,25 @@ module.exports = function (name, path, options) {
                 elemName = name
                 getValue('username').then(val => {
                     verifyFSAndInstall(val, elemName, elem, path)
+                        .then(() => {
+                            log.success('Files has been installed')
+                        })
+                        .catch(err => {
+                            log.error('Such files already exist')
+                        })
                 })
             } else if(vals.length === 2) {
                 author = vals[0].slice(1)
                 elemName = vals[1]
                 verifyFSAndInstall(author, elemName, elem, path)
-                .then(() => {
-                    console.log('Files has been installed')
-                })
-                .catch(err => {
-                    console.log('FS Error')
-                })
+                    .then(() => {
+                        log.success('Files has been installed')
+                    })
+                    .catch(err => {
+                        log.error('Such files already exist')
+                    })
             } else {
-                console.log('Incorect format of element name')
+                log.error('Incorect format of element name')
             }
            
         }

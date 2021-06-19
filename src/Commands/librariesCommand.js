@@ -1,7 +1,7 @@
 const inquirer = require('inquirer')
 const axios = require('../axios')
 const { setValue , token } = require('../db')
-
+const log = require('../logging')
 
 function getItems(page, my) {
     axios.get('CLI/libraries', {
@@ -45,7 +45,7 @@ function getItems(page, my) {
             });
     })
     .catch(err => {
-        console.log('Error')
+        log.error('Error')
     })
 }
 

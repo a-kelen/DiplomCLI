@@ -1,8 +1,11 @@
 #!/usr/bin/env node
 
-const inquirer = require('inquirer');
-const axios = require('axios');
-const { Command } = require('commander');
+const inquirer = require('inquirer')
+const axios = require('axios')
+const { Command } = require('commander')
+const chalk = require('chalk')
+const styles = require('ansi-styles')
+
 
 const loginCommand = require('./src/Commands/loginCommand')
 const logoutCommand = require('./src/Commands/logoutCommand')
@@ -11,19 +14,9 @@ const librariesCommand = require('./src/Commands/librariesCommand')
 const dependenciesCommand = require('./src/Commands/dependenciesCommand')
 const installCommand = require('./src/Commands/installCommand')
 const langCommand = require('./src/Commands/langCommand')
-//+ login
-// logout
-// lang (-set ua/en)
-// libraries (-type vuejs, vuets, react, angular)
-// components (-type vuejs, vuets, react, angular)
-
-// install -l  @admin/LibName  path/libs/lib1 --dependencies
-
-// dependencies -l @admin/libname -i
-
 
 const program = new Command();
-program.version('0.0.1');
+program.version('1.1.1');
 
 program
   .command('login')
@@ -86,12 +79,15 @@ program
     installCommand(name, path, options)
   })  
 
-program
-  .command('lang')
-  .option('-s, --set', 'Set language ua/en ')
-  .description('Command for language setting')
-  .action(function (options) {
-    langCommand(options)
-  }) 
+  program
+  .command('test')
+  .description('Command for install a element')
+  .action(function () {
+    const error = chalk.red
+    const success = chalk.green
+    console.log(success('asd'))
+    console.log(error('asd'))
+  })  
+
 
 program.parse(process.argv)

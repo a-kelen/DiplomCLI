@@ -1,6 +1,6 @@
 const inquirer = require('inquirer')
 const axios = require('../axios')
-
+const log = require('../logging')
 
 const { setValue, getValue, token } = require('../db')
 module.exports = function () {
@@ -30,13 +30,13 @@ module.exports = function () {
                             
                             setValue('token', resp.data.token).then(() => {
                                 setValue('username', resp.data.username).then(() => {
-                                    console.log('You are logged as : ', resp.data.name)
+                                    log.success('You are logged as : ' + resp.data.name)
                                 })
                             })
                         }
                 })
                 .catch(() => {
-                    console.log('Invalid email or password!')
+                    log.error('Invalid email or password!')
                 })
             
             
